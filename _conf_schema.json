@@ -1,0 +1,91 @@
+{
+  "font": {
+    "description": "绘图字体列表",
+    "type": "list",
+    "default": ["Minecraft Seven", "unifont"],
+    "hint": "按顺序尝试使用的字体名称。建议安装 Minecraft Seven 与 unifont。"
+  },
+  "show_addr": {
+    "description": "显示测试地址",
+    "type": "bool",
+    "default": false
+  },
+  "show_delay": {
+    "description": "显示测试延迟",
+    "type": "bool",
+    "default": true
+  },
+  "show_mods": {
+    "description": "显示 Mod 列表",
+    "type": "bool",
+    "default": false,
+    "hint": "服务器 Mod 较多时会明显增加图片高度。"
+  },
+  "reply_target": {
+    "description": "保留源插件回复目标配置",
+    "type": "bool",
+    "default": true,
+    "hint": "AstrBot 被动回复文档未提供 NoneBot reply_to 的直接等价参数；当前版本保留该配置但使用普通被动回复。"
+  },
+  "shortcuts": {
+    "description": "正则快捷指令",
+    "type": "template_list",
+    "templates": {
+      "shortcut": {
+        "name": "快捷指令",
+        "display_item": "regex",
+        "items": {
+          "regex": {
+            "description": "匹配消息的正则表达式",
+            "type": "string",
+            "default": ""
+          },
+          "host": {
+            "description": "查询的服务器地址",
+            "type": "string",
+            "default": ""
+          },
+          "type": {
+            "description": "服务器类型",
+            "type": "string",
+            "default": "auto",
+            "options": ["auto", "je", "be"],
+            "hint": "auto 为自动检测，je 为 Java 版，be 为基岩版。"
+          },
+          "whitelist": {
+            "description": "群号白名单",
+            "type": "list",
+            "default": [],
+            "hint": "为空表示所有会话可用；填写后仅 group_id 命中的群聊触发。"
+          }
+        }
+      }
+    }
+  },
+  "resolve_dns": {
+    "description": "解析 DNS 记录",
+    "type": "bool",
+    "default": true
+  },
+  "resolve_dns_ipv6": {
+    "description": "优先解析并尝试 IPv6",
+    "type": "bool",
+    "default": true
+  },
+  "query_twice": {
+    "description": "查询两次以改善延迟显示",
+    "type": "bool",
+    "default": true,
+    "hint": "第一次查询的延迟通常不准，开启后会额外请求一次服务器状态。"
+  },
+  "java_protocol_version": {
+    "description": "Java 版查询协议版本",
+    "type": "int",
+    "default": 772
+  },
+  "enable_auto_detect": {
+    "description": "motd 命令自动检测服务器类型",
+    "type": "bool",
+    "default": true
+  }
+}
