@@ -9,11 +9,13 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 - 查询 Minecraft Java 版服务器 MOTD、版本、协议、在线人数、延迟等信息。
 - 查询 Minecraft 基岩版服务器 MOTD、版本、在线人数、地图、游戏模式、延迟等信息。
 - 支持自动检测 Java 版或基岩版服务器。
-- 支持将查询结果绘制为图片发送。
+- 将查询结果绘制为图片发送。
 - 支持通过配置添加正则快捷指令。
 - 支持 DNS 和 SRV 记录解析。
 
 ## 指令
+
+指令前缀使用 AstrBot 配置文件中定义的唤醒词，默认为 `/`。
 
 | 指令 | 说明 |
 | --- | --- |
@@ -43,7 +45,7 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 - `resolve_dns`：是否解析 DNS 记录。
 - `resolve_dns_ipv6`：是否优先解析并尝试 IPv6。
 - `query_twice`：是否查询两次以改善延迟显示。
-- `java_protocol_version`：Java 版查询协议版本。
+- `java_protocol_version`：Java 版查询[协议版本](https://zh.minecraft.wiki/w/%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC?variant=zh-cn)。
 - `enable_auto_detect`：`/motd` 是否自动检测服务器类型。
 
 ## 依赖

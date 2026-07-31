@@ -70,7 +70,7 @@
   "resolve_dns_ipv6": {
     "description": "优先解析并尝试 IPv6",
     "type": "bool",
-    "default": true
+    "default": false
   },
   "query_twice": {
     "description": "查询两次以改善延迟显示",
@@ -81,7 +81,7 @@
   "java_protocol_version": {
     "description": "Java 版查询协议版本",
     "type": "int",
-    "default": 772
+    "default": 776
   },
   "enable_auto_detect": {
     "description": "motd 命令自动检测服务器类型",

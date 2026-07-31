@@ -61,7 +61,7 @@ class ConfigProxy:
 
     @property
     def java_protocol_version(self) -> int:
-        return int(self.get("java_protocol_version", 772))
+        return int(self.get("java_protocol_version", 776))
 
     @property
     def enable_auto_detect(self) -> bool:
