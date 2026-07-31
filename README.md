@@ -19,11 +19,11 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 
 | 指令 | 说明 |
 | --- | --- |
+| `/motd` `/motdje` `/motdpe` | 显示使用帮助图。 |
 | `/motd <服务器地址>` | 查询服务器状态。默认自动检测服务器类型；若关闭自动检测，则按 Java 版查询。 |
 | `/motdje <服务器地址>` | 强制按 Minecraft Java 版服务器查询。 |
 | `/motdpe <服务器地址>` | 强制按 Minecraft 基岩版服务器查询。 |
 | `/motdbe <服务器地址>` | `/motdpe` 的别名，强制按基岩版服务器查询。 |
-| `/motd` `/motdje` `/motdpe` | 显示使用帮助图。 |
 
 服务器地址必须与指令之间使用空格分隔，例如：
 
@@ -37,16 +37,44 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 
 插件提供 `_conf_schema.json`，可在 AstrBot WebUI 中配置：
 
-- `font`：绘图使用的字体列表。
-- `show_addr`：是否显示测试地址。
-- `show_delay`：是否显示测试延迟。
-- `show_mods`：是否显示 Mod 列表。
-- `shortcuts`：正则快捷指令列表。
-- `resolve_dns`：是否解析 DNS 记录。
-- `resolve_dns_ipv6`：是否优先解析并尝试 IPv6。
-- `query_twice`：是否查询两次以改善延迟显示。
-- `java_protocol_version`：Java 版查询[协议版本](https://zh.minecraft.wiki/w/%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC?variant=zh-cn)。
-- `enable_auto_detect`：`/motd` 是否自动检测服务器类型。
+| 配置项 | 默认值 | 说明 |
+| :--- | :--- | :--- |
+| `font` | `["Minecraft AE", "unifont"]` | 指定绘图所用的字体列表，如需使用其他字体，请参考下方“字体安装”一节。 |
+| `show_icon` | `true` | 是否显示服务器图标。 <br> 开启后优先渲染服务器返回的图标，服务器无图标或图标解析失败时回退到默认图标；关闭后始终使用默认图标。 |
+| `show_motd` | `true` | 是否显示服务器 MOTD 文本。关闭后会显示 `motd1` 和 `motd2` 配置的提示文案。 |
+| `motd1` | `插件已关闭 Motd 信息渲染` | MOTD 关闭时显示的第一行文本。 |
+| `motd2` | `如需开启请联系 Bot 管理员` | MOTD 关闭时显示的第二行文本。 |
+| `show_addr` | `false` | 是否显示测试地址。 |
+| `show_delay` | `true` | 是否显示测试延迟。 |
+| `show_mods` | `false` | 是否显示 Java 版服务器返回的 Mod 列表。 |
+| `show_playerlist` | `true` | 是否显示 Java 版服务器返回的玩家列表。 |
+| `shortcuts` | 空 | 正则快捷指令列表，可使用 AstrBot WebUI 快速添加。 |
+| `resolve_dns` | `true` | 是否由插件解析 DNS 记录后再进行查询。 <br> 如果你的服务器在运行 Clash 等拦截了 DNS 解析的软件，且查询部分地址时遇到了问题，请尝试关闭此配置项。<br> 此配置项不影响 Java 服务器的 SRV 记录解析。 |
+| `resolve_dns_ipv6` | `false` | 是否优先解析并尝试 IPv6。 <br> 当启用此配置项时，会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。 |
+| `query_twice` | `true` | 是否查询两次以改善延迟显示。 <br> 由于第一次测得的延迟一般不准，所以做了这个配置，开启后每次查询时，会丢掉第一次的结果再查询一次，且使用第二次查询到的结果。 |
+| `java_protocol_version` | `776` | Java 版查询时发送的[协议版本](https://zh.minecraft.wiki/w/%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC?variant=zh-cn)。 <br> [Java 版正式版协议版本列表](https://www.zeronight.top/archives/5) |
+| `enable_auto_detect` | `true` | `/motd` 是否自动检测服务器类型。 |
+
+## 字体安装
+
+为获得更接近游戏内原版的字体效果，建议安装 Minecraft AE 或 Unifont 字体。请从以下链接下载对应字体文件，将其安装至操作系统后，再从插件配置中添加或修改对应的字体名称。
+
+- Minecraft AE 字体下载：[Github](https://github.com/8kateam/astrbot_plugin_picmcmotd/releases/download/0.0.1/Minecraft.AE.ttf)
+- Unifont 字体下载：[Unifont 官方网站](https://www.unifoundry.com/unifont/index.html) | [GNU Ftp Server](https://ftp.gnu.org/gnu/unifont/) | [Github](https://github.com/8kateam/astrbot_plugin_picmcmotd/releases/download/0.0.1/unifont-17.0.05.otf)
+
+## 截图
+
+> 下方截图中，Bot 回复消息内所呈现的图片字体均为 Minecraft AE。
+
+![1](https://raw.githubusercontent.com/8kateam/8ka-material/refs/heads/main/picmcmotd/picmcmotd1.png)
+
+![2](https://raw.githubusercontent.com/8kateam/8ka-material/refs/heads/main/picmcmotd/picmcmotd2.png)
+
+![3](https://raw.githubusercontent.com/8kateam/8ka-material/refs/heads/main/picmcmotd/picmcmotd3.png)
+
+## 更新日志
+
+有关本项目的完整更新记录，请参阅 [CHANGELOG.md](/CHANGELOG.md) 文档。
 
 ## 依赖
 
@@ -59,14 +87,6 @@ Pillow
 pil-utils>=0.2.2
 punycode>=0.2.1
 ```
-
-## 截图
-
-![1](https://raw.githubusercontent.com/8kateam/8ka-material/refs/heads/main/picmcmotd/picmcmotd1.png)
-
-![2](https://raw.githubusercontent.com/8kateam/8ka-material/refs/heads/main/picmcmotd/picmcmotd2.png)
-
-![3](https://raw.githubusercontent.com/8kateam/8ka-material/refs/heads/main/picmcmotd/picmcmotd3.png)
 
 ## 致谢
 

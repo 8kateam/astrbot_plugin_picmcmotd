@@ -301,9 +301,15 @@ def draw_java(res: JavaStatusResponse, addr: str) -> BytesIO:
     transformer = BBCodeTransformer(bedrock=res.motd.bedrock)
     # there're no line spacing in Text2Image since pil-utils 0.2.0
     # so we split lines there then manually add the space
-    motd = [
-        transformer.transform(x) for x in split_motd_lines(trim_motd(res.motd.parsed))
-    ]
+    if config.show_motd:
+        motd = [
+            transformer.transform(x) for x in split_motd_lines(trim_motd(res.motd.parsed))
+        ]
+    else:
+        motd = [
+            config.motd1,
+            config.motd2,
+        ]
     online_percent = (
         f"{res.players.online / res.players.max * 100:.2f}"
         if res.players.max
@@ -348,7 +354,7 @@ def draw_java(res: JavaStatusResponse, addr: str) -> BytesIO:
             l_style("Mod 列表: "),
             ImageGrid.from_list(mod_list),
         )
-    if res.players.sample:
+    if config.show_playerlist and res.players.sample:
         grid.append_line(
             l_style("玩家列表: "),
             ImageGrid.from_list(
@@ -359,19 +365,27 @@ def draw_java(res: JavaStatusResponse, addr: str) -> BytesIO:
             ),
         )
 
-    icon = (
-        BuildImage.open(BytesIO(base64.b64decode(res.icon.split(",")[-1])))
-        if res.icon
-        else None
-    )
+    icon = DEFAULT_ICON_RES
+    if config.show_icon and res.icon:
+        try:
+            icon = BuildImage.open(BytesIO(base64.b64decode(res.icon.split(",")[-1])))
+        except Exception:
+            logger.warning("服务器图标解析失败，已回退到默认图标")
     return build_img(JE_HEADER, SUCCESS_TITLE, icon=icon, extra=grid)
 
 
 def draw_bedrock(res: "BedrockStatusResponse", addr: str) -> BytesIO:
     transformer = BBCodeTransformer(bedrock=res.motd.bedrock)
-    motd = (
-        transformer.transform(x) for x in split_motd_lines(trim_motd(res.motd.parsed))
-    )
+    if config.show_motd:
+        motd = (
+            transformer.transform(x)
+            for x in split_motd_lines(trim_motd(res.motd.parsed))
+        )
+    else:
+        motd = [
+            config.motd1,
+            config.motd2,
+        ]
     online_percent = (
         f"{int(res.players.online) / int(res.players.max) * 100:.2f}"
         if res.players.max
@@ -403,7 +417,8 @@ def draw_bedrock(res: "BedrockStatusResponse", addr: str) -> BytesIO:
             ex_default_style(f"{res.latency:.2f}ms", get_latency_color(res.latency)),
         )
 
-    return build_img(BE_HEADER, SUCCESS_TITLE, extra=grid)
+    icon = DEFAULT_ICON_RES
+    return build_img(BE_HEADER, SUCCESS_TITLE, icon=icon, extra=grid)
 
 
 def parse_error(e: Exception) -> tuple[str, str]:

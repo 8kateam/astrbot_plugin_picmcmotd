@@ -40,8 +40,24 @@ class ConfigProxy:
         return bool(self.get("show_mods", False))
 
     @property
-    def reply_target(self) -> bool:
-        return bool(self.get("reply_target", True))
+    def show_icon(self) -> bool:
+        return bool(self.get("show_icon", True))
+
+    @property
+    def show_motd(self) -> bool:
+        return bool(self.get("show_motd", True))
+
+    @property
+    def motd1(self) -> str:
+        return str(self.get("motd1", "插件已关闭 Motd 信息渲染"))
+
+    @property
+    def motd2(self) -> str:
+        return str(self.get("motd2", "如需开启请联系 Bot 管理员"))
+
+    @property
+    def show_playerlist(self) -> bool:
+        return bool(self.get("show_playerlist", True))
 
     @property
     def shortcuts(self) -> list[ShortcutType]:

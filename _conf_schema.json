@@ -2,8 +2,32 @@
   "font": {
     "description": "绘图字体列表",
     "type": "list",
-    "default": ["Minecraft Seven", "unifont"],
-    "hint": "按顺序尝试使用的字体名称。建议安装 Minecraft Seven 与 unifont。"
+    "default": ["Minecraft AE", "unifont"],
+    "hint": "按顺序尝试使用的字体名称。建议安装 Minecraft AE 或 Unifont 字体。"
+  },
+  "show_icon": {
+    "description": "显示服务器图标",
+    "type": "bool",
+    "default": true,
+    "hint": "开启后按现有逻辑渲染服务器图标；若服务器没有图标，则使用默认图标。关闭后始终使用默认图标。"
+  },
+  "show_motd": {
+    "description": "显示 MOTD 文本",
+    "type": "bool",
+    "default": true,
+    "hint": "开启后按现有逻辑渲染 MOTD；关闭后会改为 motd1 和 motd2 配置的提示文案。"
+  },
+  "motd1": {
+    "description": "MOTD 关闭时第一行文本",
+    "type": "string",
+    "default": "插件已关闭 Motd 信息渲染",
+    "hint": "仅在 show_motd 关闭时生效。"
+  },
+  "motd2": {
+    "description": "MOTD 关闭时第二行文本",
+    "type": "string",
+    "default": "如需开启请联系 Bot 管理员",
+    "hint": "仅在 show_motd 关闭时生效。"
   },
   "show_addr": {
     "description": "显示测试地址",
@@ -21,11 +45,11 @@
     "default": false,
     "hint": "服务器 Mod 较多时会明显增加图片高度。"
   },
-  "reply_target": {
-    "description": "保留源插件回复目标配置",
+  "show_playerlist": {
+    "description": "显示玩家列表",
     "type": "bool",
     "default": true,
-    "hint": "AstrBot 被动回复文档未提供 NoneBot reply_to 的直接等价参数；当前版本保留该配置但使用普通被动回复。"
+    "hint": "开启后显示 Java 版服务器返回的玩家列表；关闭后不显示玩家列表。"
   },
   "shortcuts": {
     "description": "正则快捷指令",
@@ -63,14 +87,15 @@
     }
   },
   "resolve_dns": {
-    "description": "解析 DNS 记录",
+    "description": "是否由插件解析 DNS 记录",
     "type": "bool",
     "default": true
   },
   "resolve_dns_ipv6": {
     "description": "优先解析并尝试 IPv6",
     "type": "bool",
-    "default": false
+    "default": false,
+    "hint": "启用时会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。"
   },
   "query_twice": {
     "description": "查询两次以改善延迟显示",
