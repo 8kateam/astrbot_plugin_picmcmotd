@@ -91,6 +91,13 @@ class ConfigProxy:
     def enable_auto_detect(self) -> bool:
         return bool(self.get("enable_auto_detect", True))
 
+    @property
+    def command_prefix(self) -> str:
+        value = self.get("command_prefix", "/")
+        if not isinstance(value, str) or not value.strip():
+            return "/"
+        return value
+
 
 config = ConfigProxy()
 

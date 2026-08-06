@@ -15,7 +15,7 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 
 ## 指令
 
-指令前缀使用 AstrBot 配置文件中定义的唤醒词，默认为 `/`。
+指令实际前缀由 AstrBot 配置文件中的唤醒词管理，默认为 `/`。帮助图中的展示前缀可通过插件配置项 `command_prefix` 单独设置，该配置仅影响帮助图渲染。
 
 | 指令 | 说明 |
 | --- | --- |
@@ -55,6 +55,7 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 | `query_timeout` | `10` | 单次 Java 版或基岩版查询的总超时时间，单位为秒，包含 DNS 解析和状态请求。可设置范围为 `1` 至 `60`。 |
 | `java_protocol_version` | `776` | Java 版查询时发送的[协议版本](https://zh.minecraft.wiki/w/%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC?variant=zh-cn)。 <br> [Java 版正式版协议版本列表](https://8ka.hk/pvn) |
 | `enable_auto_detect` | `true` | `/motd` 是否自动检测服务器类型。 <br> 关闭后将始终作为 Java 版服务器查询。 |
+| `command_prefix` | `/` | 帮助图中显示的命令前缀。仅影响帮助图渲染，实际前缀由 AstrBot 配置管理。 |
 
 ## 字体安装
 

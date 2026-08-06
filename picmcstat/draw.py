@@ -286,7 +286,7 @@ def build_img(
 
 
 def draw_help(svr_type: ServerType) -> BytesIO:
-    prefix = "/"
+    prefix = config.command_prefix
 
     extra_txt = [
         f"查询Java版服务器: {prefix}motdje <服务器IP>",
