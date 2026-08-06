@@ -116,12 +116,12 @@
     "hint": "Java 版正式版协议版本列表：https://8ka.hk/pvn"
   },
   "enable_auto_detect": {
-    "description": "motd 命令自动检测服务器类型",
+    "description": "motd 指令自动检测服务器类型",
     "type": "bool",
     "default": true
   },
   "command_prefix": {
-    "description": "帮助图命令前缀",
+    "description": "帮助图指令前缀",
     "type": "string",
     "default": "/",
     "hint": "仅影响帮助图渲染，实际前缀由 AstrBot 配置管理。"
