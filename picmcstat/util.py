@@ -1,3 +1,4 @@
+import ipaddress
 import random
 import re
 import string
@@ -103,17 +104,56 @@ async def resolve_srv(host: str) -> tuple[str, int]:
     return str(answer.target), int(answer.port)
 
 
+def parse_port(value: str) -> int:
+    """解析端口号，超出范围或非数字时抛出 ValueError。"""
+    port = int(value)
+    if not 1 <= port <= 65535:
+        raise ValueError(f"端口号超出范围: {port}")
+    return port
+
+
+def split_host_port(addr: str) -> tuple[str, int | None]:
+    """拆分地址中的主机和端口，兼容 IPv6 字面量。
+
+    支持 `host`、`host:port`、`[IPv6]`、`[IPv6]:port`
+    以及不带方括号的裸 IPv6 字面量。
+    """
+    addr = addr.strip()
+
+    # [IPv6] 或 [IPv6]:port
+    if addr.startswith("["):
+        end = addr.find("]")
+        if end != -1:
+            host = addr[1:end]
+            rest = addr[end + 1 :]
+            if rest.startswith(":") and rest[1:]:
+                return host, parse_port(rest[1:])
+            return host, None
+
+    # 裸 IPv6 字面量，冒号属于地址本身而非端口分隔符
+    if addr.count(":") > 1:
+        try:
+            ipaddress.IPv6Address(addr)
+        except ValueError:
+            pass
+        else:
+            return addr, None
+
+    if ":" in addr:
+        host, _, port = addr.rpartition(":")
+        if host and port:
+            return host, parse_port(port)
+
+    return addr, None
+
+
 async def resolve_ip(
     ip: str,
     srv: bool = False,
     *,
     resolve_dns_ipv6: bool | None = None,
 ) -> tuple[str, int | None]:
-    if ":" in ip:
-        host, port = ip.split(":", maxsplit=1)
-    else:
-        host = ip
-        port = None
+    host, port = split_host_port(ip)
 
     if (not port) and srv:
         try:

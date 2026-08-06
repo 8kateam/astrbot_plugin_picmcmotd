@@ -8,7 +8,7 @@ from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star, register
 from astrbot.core.utils.astrbot_path import get_astrbot_data_path
 
-from .picmcstat.config import set_config
+from .picmcstat.config import config, set_config
 from .picmcstat.const import ServerType
 from .picmcstat.draw import draw
 
@@ -64,7 +64,7 @@ class PicMCMotdPlugin(Star):
     @filter.command("motd")
     async def motd(self, event: AstrMessageEvent, host: str = ""):
         """查询 Minecraft 服务器状态图；按配置自动检测或默认 Java 版。"""
-        svr_type: ServerType = "auto" if self.config.get("enable_auto_detect", True) else "je"
+        svr_type: ServerType = "auto" if config.enable_auto_detect else "je"
         async for result in self._reply_query_result(event, host, svr_type):
             yield result
 
@@ -87,7 +87,7 @@ class PicMCMotdPlugin(Star):
         if not message:
             return
 
-        for shortcut in self.config.get("shortcuts", []):
+        for shortcut in config.shortcuts:
             regex = shortcut.get("regex", "")
             host = shortcut.get("host", "")
             svr_type = shortcut.get("type", "auto")

@@ -50,7 +50,7 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 | `show_playerlist` | `true` | 是否显示 Java 版服务器返回的玩家列表。 |
 | `shortcuts` | 空 | 正则快捷指令列表，可使用 AstrBot WebUI 快速添加。 |
 | `resolve_dns` | `true` | 是否由插件解析 DNS 记录后再进行查询。 <br> 如果你的服务器在运行 Clash 等拦截了 DNS 解析的软件，且查询部分地址时遇到了问题，请尝试关闭此配置项。<br> 此配置项不影响 Java 服务器的 SRV 记录解析。 |
-| `resolve_dns_ipv6` | `false` | 是否优先解析并尝试 IPv6。 <br> 当启用此配置项时，会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。 |
+| `resolve_dns_ipv6` | `false` | 是否优先解析并尝试 IPv6。 <br> 当启用此配置项时，会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。<br> 此配置项依赖 `resolve_dns`，若 `resolve_dns` 为 `false`，插件不会解析 DNS 记录，本配置项将不生效。 |
 | `query_twice` | `true` | 是否查询两次以改善延迟显示。 <br> 由于第一次测得的延迟一般不准，所以做了这个配置，开启后每次查询时，会丢掉第一次的结果再查询一次，且使用第二次查询到的结果。 |
 | `query_timeout` | `10` | 单次 Java 版或基岩版查询的总超时时间，单位为秒，包含 DNS 解析和状态请求。可设置范围为 `1` 至 `60`。 |
 | `java_protocol_version` | `776` | Java 版查询时发送的[协议版本](https://zh.minecraft.wiki/w/%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC?variant=zh-cn)。 <br> [Java 版正式版协议版本列表](https://8ka.hk/pvn) |
@@ -91,7 +91,8 @@ punycode>=0.2.1
 
 ## 致谢
 
-- **[`nonebot_plugin_picmcstat`](https://github.com/lgc-NB2Dev/nonebot-plugin-picmcstat)** — 上游项目，本仓库自此复刻而来
+- [`nonebot_plugin_picmcstat`](https://github.com/lgc-NB2Dev/nonebot-plugin-picmcstat) — 上游项目，本仓库自此复刻并重构内容。
+- [OpenCode](https://opencode.ai/) - 本项目部分代码使用此 AI 编程工具协助完成，并经由人工审阅。
 
 ## LICENSE
 

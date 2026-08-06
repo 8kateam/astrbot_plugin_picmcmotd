@@ -18,16 +18,16 @@
     "hint": "开启后按现有逻辑渲染 MOTD；关闭后会改为 motd1 和 motd2 配置的提示文案。"
   },
   "motd1": {
-    "description": "MOTD 关闭时第一行文本",
+    "description": "MOTD1 文本",
     "type": "string",
     "default": "插件已关闭 Motd 信息渲染",
-    "hint": "仅在 show_motd 关闭时生效。"
+    "hint": "替换服务器返回的第1行 Motd 信息，仅在 show_motd 关闭时生效。"
   },
   "motd2": {
-    "description": "MOTD 关闭时第二行文本",
+    "description": "MOTD2 文本",
     "type": "string",
     "default": "如需开启请联系 Bot 管理员",
-    "hint": "仅在 show_motd 关闭时生效。"
+    "hint": "替换服务器返回的第2行 Motd 信息，仅在 show_motd 关闭时生效。"
   },
   "show_addr": {
     "description": "显示测试地址",
@@ -80,7 +80,7 @@
             "description": "群号白名单",
             "type": "list",
             "default": [],
-            "hint": "为空表示所有会话可用；填写后仅 group_id 命中的群聊触发。"
+            "hint": "（仅支持 OneBot V11 适配器）为空表示所有会话可用；填写后仅 group_id 命中的群聊触发。"
           }
         }
       }
@@ -95,7 +95,7 @@
     "description": "优先解析并尝试 IPv6",
     "type": "bool",
     "default": false,
-    "hint": "启用时会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。"
+    "hint": "启用时会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。此配置项需要同时开启 resolve_dns 才会生效。"
   },
   "query_twice": {
     "description": "查询两次以改善延迟显示",
@@ -113,7 +113,7 @@
     "description": "Java 版查询协议版本",
     "type": "int",
     "default": 776,
-    "hint": "Java版正式版协议版本列表：https://8ka.hk/pvn"
+    "hint": "Java 版正式版协议版本列表：https://8ka.hk/pvn"
   },
   "enable_auto_detect": {
     "description": "motd 命令自动检测服务器类型",
