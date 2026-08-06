@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from pil_utils import BuildImage
+from .image import BuildImage
 
 MODULE_DIR = Path(__file__).parent
 RES_DIR = MODULE_DIR / "res"

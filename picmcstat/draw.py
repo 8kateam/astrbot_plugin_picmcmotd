@@ -12,10 +12,10 @@ from mcstatus.motd import Motd
 from mcstatus.status_response import JavaStatusResponse
 from astrbot.api import logger
 from PIL.Image import Resampling
-from pil_utils import BuildImage, Text2Image
 
 from .config import config
 from .const import CODE_COLOR, GAME_MODE_MAP, STROKE_COLOR, ServerType, ServerTypeRaw
+from .image import BuildImage, Color, Text2Image
 from .res import DEFAULT_ICON_RES, DIRT_RES, GRASS_RES
 from .util import (
     BBCodeTransformer,
@@ -30,7 +30,6 @@ from .util import (
 
 if TYPE_CHECKING:
     from mcstatus.responses import BedrockStatusResponse
-    from pil_utils.typing import ColorType
 
 MARGIN = 32
 MIN_WIDTH = 512
@@ -179,7 +178,7 @@ class ImageGrid(list[ImageLine]):
 
     def to_image(
         self,
-        background: Optional["ColorType"] = None,
+        background: Optional[Color] = None,
         padding: int = 2,
     ) -> BuildImage:
         size = calc_offset(self.size, (padding * 2, padding * 2))
@@ -302,8 +301,7 @@ def draw_help(svr_type: ServerType) -> BytesIO:
 
 def draw_java(res: JavaStatusResponse, addr: str) -> BytesIO:
     transformer = BBCodeTransformer(bedrock=res.motd.bedrock)
-    # there're no line spacing in Text2Image since pil-utils 0.2.0
-    # so we split lines there then manually add the space
+    # Pillow 文本渲染按行处理，因此需先拆分 MOTD 中的换行。
     if config.show_motd:
         motd = [
             transformer.transform(truncate_motd_line(x))

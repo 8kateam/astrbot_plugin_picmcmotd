@@ -85,9 +85,7 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 ```text
 mcstatus>=12.0.5,<13
 dnspython>=2.7.0
-Pillow
-pil-utils>=0.2.2
-punycode>=0.2.1
+Pillow>=12.0.0
 ```
 
 ## 致谢
