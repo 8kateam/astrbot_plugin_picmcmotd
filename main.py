@@ -13,7 +13,7 @@ from .picmcstat.const import ServerType
 from .picmcstat.draw import draw
 
 
-@register("PicMCMotd", "Midnight-2004", "查询 Minecraft 服务器 MOTD 和在线状态的插件", "0.0.2")
+@register("PicMCMotd", "Midnight-2004", "查询 Minecraft 服务器 MOTD 和在线状态的插件", "0.0.3")
 class PicMCMotdPlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
