@@ -1,3 +1,4 @@
+import asyncio
 import base64
 import errno
 import socket
@@ -23,6 +24,7 @@ from .util import (
     get_latency_color,
     resolve_ip,
     split_motd_lines,
+    truncate_motd_line,
     trim_motd,
 )
 
@@ -227,6 +229,7 @@ def build_img(
     half_header_height = int(header_height / 2)
 
     bg_width = width(extra) + MARGIN * 2 if extra else MIN_WIDTH
+    bg_width = min(bg_width, 1500)
     bg_height = header_height + MARGIN * 2
     bg_width = max(bg_width, MIN_WIDTH)
     if extra:
@@ -303,7 +306,8 @@ def draw_java(res: JavaStatusResponse, addr: str) -> BytesIO:
     # so we split lines there then manually add the space
     if config.show_motd:
         motd = [
-            transformer.transform(x) for x in split_motd_lines(trim_motd(res.motd.parsed))
+            transformer.transform(truncate_motd_line(x))
+            for x in split_motd_lines(trim_motd(res.motd.parsed))
         ]
     else:
         motd = [
@@ -378,7 +382,7 @@ def draw_bedrock(res: "BedrockStatusResponse", addr: str) -> BytesIO:
     transformer = BBCodeTransformer(bedrock=res.motd.bedrock)
     if config.show_motd:
         motd = (
-            transformer.transform(x)
+            transformer.transform(truncate_motd_line(x))
             for x in split_motd_lines(trim_motd(res.motd.parsed))
         )
     else:
@@ -502,21 +506,24 @@ async def draw(ip: str, svr_type: ServerType) -> BytesIO:
         return draw_resp(resp, ip)
 
     async def _inner_with_fallback(t: ServerTypeRaw) -> BytesIO:
-        # If IPv6 is disabled, just use IPv4
-        if not config.resolve_dns_ipv6:
-            return await _inner(t, resolve_dns_ipv6=False)
-
-        # Try IPv6 first, fall back to IPv4 if unreachable
-        try:
-            return await _inner(t, resolve_dns_ipv6=True)
-        except Exception as e:
-            if is_ipv6_unreachable_error(e):
-                logger.debug(
-                    f"IPv6 connection failed with {e.__class__.__name__}, "
-                    "falling back to IPv4",
-                )
+        async def _query() -> BytesIO:
+            # If IPv6 is disabled, just use IPv4
+            if not config.resolve_dns_ipv6:
                 return await _inner(t, resolve_dns_ipv6=False)
-            raise
+
+            # Try IPv6 first, fall back to IPv4 if unreachable
+            try:
+                return await _inner(t, resolve_dns_ipv6=True)
+            except Exception as e:
+                if is_ipv6_unreachable_error(e):
+                    logger.debug(
+                        f"IPv6 connection failed with {e.__class__.__name__}, "
+                        "falling back to IPv4",
+                    )
+                    return await _inner(t, resolve_dns_ipv6=False)
+                raise
+
+        return await asyncio.wait_for(_query(), timeout=config.query_timeout)
 
     try:
         if not ip:

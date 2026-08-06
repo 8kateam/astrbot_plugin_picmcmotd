@@ -237,6 +237,25 @@ def split_motd_lines(motd: Sequence[ParsedMotdComponent]):
     return lines
 
 
+def truncate_motd_line(
+    line: Sequence[ParsedMotdComponent],
+    max_length: int = 64,
+) -> list[ParsedMotdComponent]:
+    """限制单行 MOTD 的文本长度，同时保留其格式组件。"""
+    truncated: list[ParsedMotdComponent] = []
+    remaining = max_length
+    for component in line:
+        if not isinstance(component, str):
+            truncated.append(component)
+            continue
+        if remaining <= 0:
+            break
+        text = component[:remaining]
+        truncated.append(text)
+        remaining -= len(text)
+    return truncated
+
+
 class BBCodeTransformer(PlainTransformer):
     def __init__(self, *, bedrock: bool = False) -> None:
         self.bedrock = bedrock

@@ -2,7 +2,7 @@
 
 PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和在线状态，并将结果绘制成图片返回。插件支持 Java 版和基岩版服务器，也可以自动检测服务器类型。
 
-本插件复刻自 [`nonebot_plugin_picmcstat`](https://github.com/lgc-NB2Dev/nonebot-plugin-picmcstat)。
+本插件基于上游项目 [`nonebot_plugin_picmcstat`](https://github.com/lgc-NB2Dev/nonebot-plugin-picmcstat) 开发。
 
 ## 功能
 
@@ -39,7 +39,7 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 
 | 配置项 | 默认值 | 说明 |
 | :--- | :--- | :--- |
-| `font` | `["Minecraft AE", "unifont"]` | 指定绘图所用的字体列表，如需使用其他字体，请参考下方“字体安装”一节。 |
+| `font` | `["Minecraft AE Pixel", "Unifont"]` | 指定绘图所用的字体列表，如需使用其他字体，请参考下方“字体安装”一节。 |
 | `show_icon` | `true` | 是否显示服务器图标。 <br> 开启后优先渲染服务器返回的图标，服务器无图标或图标解析失败时回退到默认图标；关闭后始终使用默认图标。 |
 | `show_motd` | `true` | 是否显示服务器 MOTD 文本。关闭后会显示 `motd1` 和 `motd2` 配置的提示文案。 |
 | `motd1` | `插件已关闭 Motd 信息渲染` | MOTD 关闭时显示的第一行文本。 |
@@ -52,14 +52,15 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 | `resolve_dns` | `true` | 是否由插件解析 DNS 记录后再进行查询。 <br> 如果你的服务器在运行 Clash 等拦截了 DNS 解析的软件，且查询部分地址时遇到了问题，请尝试关闭此配置项。<br> 此配置项不影响 Java 服务器的 SRV 记录解析。 |
 | `resolve_dns_ipv6` | `false` | 是否优先解析并尝试 IPv6。 <br> 当启用此配置项时，会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。 |
 | `query_twice` | `true` | 是否查询两次以改善延迟显示。 <br> 由于第一次测得的延迟一般不准，所以做了这个配置，开启后每次查询时，会丢掉第一次的结果再查询一次，且使用第二次查询到的结果。 |
-| `java_protocol_version` | `776` | Java 版查询时发送的[协议版本](https://zh.minecraft.wiki/w/%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC?variant=zh-cn)。 <br> [Java 版正式版协议版本列表](https://www.zeronight.top/archives/5) |
-| `enable_auto_detect` | `true` | `/motd` 是否自动检测服务器类型。 |
+| `query_timeout` | `10` | 单次 Java 版或基岩版查询的总超时时间，单位为秒，包含 DNS 解析和状态请求。可设置范围为 `1` 至 `60`。 |
+| `java_protocol_version` | `776` | Java 版查询时发送的[协议版本](https://zh.minecraft.wiki/w/%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC?variant=zh-cn)。 <br> [Java 版正式版协议版本列表](https://8ka.hk/pvn) |
+| `enable_auto_detect` | `true` | `/motd` 是否自动检测服务器类型。 <br> 关闭后将始终作为 Java 版服务器查询。 |
 
 ## 字体安装
 
-为获得更接近游戏内原版的字体效果，建议安装 Minecraft AE 或 Unifont 字体。请从以下链接下载对应字体文件，将其安装至操作系统后，再从插件配置中添加或修改对应的字体名称。
+为获得更接近游戏内原版的字体效果，建议安装 Minecraft AE Pixel 或 Unifont 字体。请从以下链接下载对应字体文件，将其安装至操作系统后，先重启 Bot，再从插件配置中添加或修改对应的字体名称。
 
-- Minecraft AE 字体下载：[Github](https://github.com/8kateam/astrbot_plugin_picmcmotd/releases/download/0.0.1/Minecraft.AE.ttf)
+- Minecraft AE Pixel 字体下载：[Github](https://github.com/8kateam/astrbot_plugin_picmcmotd/releases/download/0.0.1/Minecraft.AE.ttf)
 - Unifont 字体下载：[Unifont 官方网站](https://www.unifoundry.com/unifont/index.html) | [GNU Ftp Server](https://ftp.gnu.org/gnu/unifont/) | [Github](https://github.com/8kateam/astrbot_plugin_picmcmotd/releases/download/0.0.1/unifont-17.0.05.otf)
 
 ## 截图
@@ -92,4 +93,10 @@ punycode>=0.2.1
 
 - **[`nonebot_plugin_picmcstat`](https://github.com/lgc-NB2Dev/nonebot-plugin-picmcstat)** — 上游项目，本仓库自此复刻而来
 
-- **[`opencode`](https://opencode.ai/)** — 本仓库大部分迁移工作由该 AI 编程工具辅助完成
+## LICENSE
+
+本插件基于上游项目 [`nonebot_plugin_picmcstat`](https://github.com/lgc-NB2Dev/nonebot-plugin-picmcstat) (MIT License) 开发。
+
+本项目新增及修改的部分，采用 [GNU Affero General Public License v3.0](/LICENSE) 授权。
+
+完整的MIT许可证文本[见此](/LICENSE-UPSTREAM)。

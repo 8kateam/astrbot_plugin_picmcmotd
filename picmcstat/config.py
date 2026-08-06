@@ -24,7 +24,7 @@ class ConfigProxy:
 
     @property
     def font(self) -> list[str]:
-        value = self.get("font", ["Minecraft Seven", "unifont"])
+        value = self.get("font", ["Minecraft AE Pixel", "Unifont"])
         return value if isinstance(value, list) else [value]
 
     @property
@@ -69,11 +69,19 @@ class ConfigProxy:
 
     @property
     def resolve_dns_ipv6(self) -> bool:
-        return bool(self.get("resolve_dns_ipv6", True))
+        return bool(self.get("resolve_dns_ipv6", False))
 
     @property
     def query_twice(self) -> bool:
         return bool(self.get("query_twice", True))
+
+    @property
+    def query_timeout(self) -> int:
+        try:
+            value = int(self.get("query_timeout", 10))
+        except (TypeError, ValueError):
+            return 10
+        return value if 1 <= value <= 60 else 10
 
     @property
     def java_protocol_version(self) -> int:

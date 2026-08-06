@@ -2,8 +2,8 @@
   "font": {
     "description": "绘图字体列表",
     "type": "list",
-    "default": ["Minecraft AE", "unifont"],
-    "hint": "按顺序尝试使用的字体名称。建议安装 Minecraft AE 或 Unifont 字体。"
+    "default": ["Minecraft AE Pixel", "Unifont"],
+    "hint": "按顺序尝试使用的字体名称。建议安装 Minecraft AE Pixel 或 Unifont 字体。"
   },
   "show_icon": {
     "description": "显示服务器图标",
@@ -43,7 +43,7 @@
     "description": "显示 Mod 列表",
     "type": "bool",
     "default": false,
-    "hint": "服务器 Mod 较多时会明显增加图片高度。"
+    "hint": "（测试功能）服务器 Mod 较多时会明显增加图片高度。"
   },
   "show_playerlist": {
     "description": "显示玩家列表",
@@ -103,10 +103,17 @@
     "default": true,
     "hint": "第一次查询的延迟通常不准，开启后会额外请求一次服务器状态。"
   },
+  "query_timeout": {
+    "description": "服务器查询超时时间（秒）",
+    "type": "int",
+    "default": 10,
+    "hint": "单次 Java 或基岩版查询的总时限，包含 DNS 解析和状态请求。可设置为 1 至 60 秒。"
+  },
   "java_protocol_version": {
     "description": "Java 版查询协议版本",
     "type": "int",
-    "default": 776
+    "default": 776,
+    "hint": "Java版正式版协议版本列表：https://8ka.hk/pvn"
   },
   "enable_auto_detect": {
     "description": "motd 命令自动检测服务器类型",
