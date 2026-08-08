@@ -80,7 +80,7 @@
             "description": "群号白名单",
             "type": "list",
             "default": [],
-            "hint": "（仅支持 OneBot V11 适配器）为空表示所有会话可用；填写后仅 group_id 命中的群聊触发。"
+            "hint": "（仅支持 OneBot V11 适配器）留空表示所有会话可用；填写后仅 group_id 命中的群聊触发。"
           }
         }
       }
@@ -95,7 +95,7 @@
     "description": "优先解析并尝试 IPv6",
     "type": "bool",
     "default": false,
-    "hint": "启用时会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。此配置项需要同时开启 resolve_dns 才会生效。"
+    "hint": "启用时会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。此配置项需要同时开启“是否由插件解析 DNS 记录”才会生效。"
   },
   "query_twice": {
     "description": "查询两次以改善延迟显示",
@@ -107,7 +107,7 @@
     "description": "服务器查询超时时间（秒）",
     "type": "int",
     "default": 10,
-    "hint": "单次 Java 或基岩版查询的总时限，包含 DNS 解析和状态请求。可设置为 1 至 60 秒。"
+    "hint": "单次 Java 或基岩版查询的总时限，包含 DNS 解析和状态请求。可设置为 1~60 秒。"
   },
   "java_protocol_version": {
     "description": "Java 版查询协议版本",

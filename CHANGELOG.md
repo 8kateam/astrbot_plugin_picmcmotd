@@ -1,6 +1,13 @@
+## 1.0.0
+
+正式版发布。
+
+- 添加已测试平台的说明。
+- 添加 logo 图标。
+
 ## 0.1.0
 
-- 重构绘图模块，弃用已停更的 `pil-utils` 和 `punycode` 模块，使其能与 Astrbot 4.27.0+ 兼容。
+- 重构绘图模块，移除已停更的 `pil-utils` 和 `punycode` 依赖项，使插件能与 Astrbot 4.27.0+ 兼容。
 
 ## 0.0.4
 
@@ -14,10 +21,8 @@
 
 ## 0.0.2
 
-添加 `show_icon`、`show_motd`、`motd1`、`motd2`、`show_playerlist` 配置项，具体用途请查看 README.md 中 **配置** 一节的内容。
+- 添加 `show_icon`、`show_motd`、`motd1`、`motd2`、`show_playerlist` 配置项，具体用途请查看 README.md 中 **配置** 一节的内容。
 
 ## 0.0.1
 
 首个可用版本。
-
-从 [`nonebot_plugin_picmcstat`](https://github.com/lgc-NB2Dev/nonebot-plugin-picmcstat) 复刻。

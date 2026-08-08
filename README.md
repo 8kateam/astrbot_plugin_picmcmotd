@@ -13,6 +13,17 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 - 支持通过配置添加正则快捷指令。
 - 支持 DNS 和 SRV 记录解析。
 
+## 兼容平台
+
+本插件理论上兼容绝大多数 AstrBot 中可用的平台，以下为已完成测试并确认可用的平台：
+
+- aiocqhttp(Onebot v11)
+- qq_official
+- qq_official_webhook
+- weixin_oc
+
+如果您使用的平台未在列表中，且插件在您的环境中能够正常运行，欢迎提交 issue 补充相关信息，以帮助更多用户。
+
 ## 指令
 
 指令实际前缀由 AstrBot 配置文件中的唤醒词管理，默认为 `/`。帮助图中的展示前缀可通过插件配置项 `command_prefix` 单独设置，该配置仅影响帮助图渲染。
@@ -24,6 +35,8 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 | `/motdje <服务器地址>` | 强制按 Minecraft Java 版服务器查询。 |
 | `/motdpe <服务器地址>` | 强制按 Minecraft 基岩版服务器查询。 |
 | `/motdbe <服务器地址>` | `/motdpe` 的别名，强制按基岩版服务器查询。 |
+
+所有查询指令的默认端口均为 25565。
 
 服务器地址必须与指令之间使用空格分隔，例如：
 
