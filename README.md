@@ -52,7 +52,7 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 
 | 配置项 | 默认值 | 说明 |
 | :--- | :--- | :--- |
-| `font` | `["Minecraft AE Pixel", "Unifont"]` | 指定绘图所用的字体列表，如需使用其他字体，请参考下方“字体安装”一节。 |
+| `font` | `["Minecraft AE Pixel", "Unifont"]` | 指定绘图所用的字体列表，如需使用其他字体，请参考下方“字体配置”一节。 |
 | `show_icon` | `true` | 是否显示服务器图标。 <br> 开启后优先渲染服务器返回的图标，服务器无图标或图标解析失败时回退到默认图标；关闭后始终使用默认图标。 |
 | `show_motd` | `true` | 是否显示服务器 MOTD 文本。关闭后会显示 `motd1` 和 `motd2` 配置的提示文案。 |
 | `motd1` | `插件已关闭 Motd 信息渲染` | MOTD 关闭时显示的第一行文本。 |
@@ -70,12 +70,16 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 | `enable_auto_detect` | `true` | `/motd` 是否自动检测服务器类型。 <br> 关闭后将始终作为 Java 版服务器查询。 |
 | `command_prefix` | `/` | 帮助图中显示的指令前缀。仅影响帮助图渲染，实际前缀由 AstrBot 配置管理。 |
 
-## 字体安装
+## 字体配置
 
 为获得更接近游戏内原版的字体效果，建议安装 Minecraft AE Pixel 或 Unifont 字体。请从以下链接下载对应字体文件，将其安装至操作系统后，先重启 Bot，再从插件配置中添加或修改对应的字体名称。
 
 - Minecraft AE Pixel 字体下载：[Github](https://github.com/8kateam/astrbot_plugin_picmcmotd/releases/download/0.0.1/Minecraft.AE.ttf)
 - Unifont 字体下载：[Unifont 官方网站](https://www.unifoundry.com/unifont/index.html) | [GNU Ftp Server](https://ftp.gnu.org/gnu/unifont/) | [Github](https://github.com/8kateam/astrbot_plugin_picmcmotd/releases/download/0.0.1/unifont-17.0.05.otf)
+
+您也可以选择系统内已安装的其他字体，名称需填写为字体的全称，如下图所示：
+
+![font](https://raw.githubusercontent.com/8kateam/8ka-material/refs/heads/main/picmcmotd/font.png)
 
 ## 截图
 
@@ -113,3 +117,5 @@ Pillow>=12.0.0
 本项目新增及修改的部分，采用 [GNU Affero General Public License v3.0](/LICENSE) 授权。
 
 完整的 MIT 许可证文本[见此](/LICENSE-UPSTREAM)。
+
+Minecraft AE Pixel 字体经溯源实为 Mojangles（英/数/标点）与 Unifont（其余字符）的混合字体，其原始独立来源已不可考。该字体组合严禁商用，且不随插件内置，请前往 Releases 页面单独下载并安装。
