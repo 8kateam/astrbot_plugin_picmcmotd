@@ -76,6 +76,14 @@ def _text_bbox(text: str, font: ImageFont.ImageFont, stroke_width: int = 0):
     )
 
 
+def _text_advance(text: str, font: ImageFont.ImageFont) -> float:
+    """测量文本的排版宽度（advance），描边不占宽度。
+
+    textlength 不支持多行文本，此处逐行求和兜底。
+    """
+    return sum(ImageDraw.Draw(Image.new("RGBA", (1, 1))).textlength(part, font=font) for part in text.split("\n"))
+
+
 class BuildImage:
     def __init__(self, image: Image.Image):
         self.image = image
@@ -254,8 +262,7 @@ class Text2Image:
 
     def _segment_width(self, segment: TextSegment) -> float:
         font = self._font(segment)
-        stroke_width = round(self.font_size * self.stroke_ratio) if segment.stroke else 0
-        return _text_bbox(segment.text, font, stroke_width)[2]
+        return _text_advance(segment.text, font)
 
     @property
     def longest_line(self) -> float:
@@ -301,12 +308,12 @@ class Text2Image:
         y = round(pos[1])
         line_height = self.height // max(1, len(self._lines_or_default))
         for line in self._lines_or_default:
-            x = round(pos[0])
+            x = pos[0]
             for segment in line:
                 font = self._font(segment)
                 stroke_width = round(self.font_size * self.stroke_ratio) if segment.stroke else 0
                 draw.text(
-                    (x, y),
+                    (round(x), y),
                     segment.text,
                     font=font,
                     fill=_color(segment.color),
@@ -330,5 +337,6 @@ class Text2Image:
                         fill=segment.color,
                         width=line_width,
                     )
-                x += round(segment_width)
+                # 按字符 advance 推进光标，避免逐字渲染时描边与取整累积导致间距过大
+                x += _text_advance(segment.text, font)
             y += line_height
