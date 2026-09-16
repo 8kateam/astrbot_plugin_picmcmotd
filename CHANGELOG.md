@@ -1,8 +1,6 @@
 ## 1.2.0
 
-AstrBot 插件市场提示上一个版本号被占用，更改版本号重试。
-
-代码部分无变化。
+修复基岩版服务器查询报错（`AttributeError: 'BedrockStatusVersion' object has no attribute 'version'`）：mcstatus 13 重构响应对象时，`BedrockStatusVersion` 的版本号字段由 `version` 更名为 `name`，更新 `draw_bedrock` 中的遗留调用为 `res.version.name`。
 
 ## 1.1.0
 

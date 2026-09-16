@@ -399,7 +399,7 @@ def draw_bedrock(res: "BedrockStatusResponse", addr: str) -> BytesIO:
     if config.show_addr:
         grid.append_line(l_style("测试地址: "), addr)
     grid.append_line(l_style("协议版本: "), str(res.version.protocol))
-    grid.append_line(l_style("游戏版本: "), res.version.version)
+    grid.append_line(l_style("游戏版本: "), res.version.name)
     grid.append_line(
         l_style("当前人数: "),
         f"{res.players.online}/{res.players.max} ({online_percent}%)",
