@@ -7,13 +7,16 @@ from typing import TYPE_CHECKING, TypeVar, cast
 
 import dns.asyncresolver
 import dns.rdatatype as rd
+from mcstatus.motd._transformers import PlainTransformer
 from mcstatus.motd.components import (
-    Formatting,
-    MinecraftColor,
+    AnyFormatting,
+    AnyMinecraftColor,
+    BedrockFormatting,
+    InvalidFormatting,
+    JavaFormatting,
     ParsedMotdComponent,
     WebColor,
 )
-from mcstatus.motd.transformers import PlainTransformer
 from astrbot.api import logger
 
 from .config import config
@@ -23,6 +26,7 @@ from .const import (
     ENUM_STROKE_COLOR,
     ENUM_STROKE_COLOR_BEDROCK,
     ENUM_STYLE_BBCODE,
+    ENUM_STYLE_BBCODE_BEDROCK,
     FORMAT_CODE_REGEX,
     OBFUSCATED_PLACEHOLDER_REGEX,
     STROKE_COLOR,
@@ -30,7 +34,7 @@ from .const import (
 
 if TYPE_CHECKING:
     from dns.rdtypes.IN.SRV import SRV as SRVRecordAnswer  # noqa: N811
-    from mcstatus.forge_data import RawForgeDataMod
+    from mcstatus.responses._raw import RawForgeDataMod
 
 RANDOM_CHAR_TEMPLATE = f"{string.ascii_letters}{string.digits}!§$%&?#"
 WHITESPACE_EXCLUDE_NEWLINE = string.whitespace.replace("\n", "")
@@ -225,12 +229,23 @@ def trim_motd(motd: list[ParsedMotdComponent]) -> list[ParsedMotdComponent]:
     return [x for x in modified_motd if x]
 
 
-def split_motd_lines(motd: Sequence[ParsedMotdComponent]):
+def split_motd_lines(
+    motd: Sequence[ParsedMotdComponent], *, bedrock: bool
+) -> list[list[ParsedMotdComponent]]:
+    """将 MOTD 组件按换行拆分为多行。
+
+    mcstatus 14 起 Java/基岩版的格式枚举已分离，
+    追加的 RESET 组件必须与 MOTD 所用的枚举版本一致，
+    否则 transformer 会因组件类型不匹配而报错。
+    """
+    reset_formatting: AnyFormatting = (
+        BedrockFormatting.RESET if bedrock else JavaFormatting.RESET
+    )
     lines: list[list[ParsedMotdComponent]] = []
 
     current_line: list[ParsedMotdComponent] = []
-    using_color: MinecraftColor | WebColor | None = None
-    using_formats: list[Formatting] = []
+    using_color: AnyMinecraftColor | WebColor | None = None
+    using_formats: list[AnyFormatting] = []
 
     for comp in motd:
         if isinstance(comp, str) and "\n" in comp:
@@ -245,7 +260,7 @@ def split_motd_lines(motd: Sequence[ParsedMotdComponent]):
             for line in str_lines:
                 if line:
                     current_line.append(line)
-                current_line.append(Formatting.RESET)
+                current_line.append(reset_formatting)
                 lines.append(current_line)
 
                 current_line = []
@@ -259,11 +274,11 @@ def split_motd_lines(motd: Sequence[ParsedMotdComponent]):
 
             continue
 
-        if isinstance(comp, MinecraftColor | WebColor):
+        if isinstance(comp, AnyMinecraftColor | WebColor):
             using_color = comp
 
-        elif isinstance(comp, Formatting):
-            if comp is Formatting.RESET:
+        elif isinstance(comp, AnyFormatting):
+            if comp is reset_formatting:
                 using_color = None
                 using_formats = []
             else:
@@ -298,7 +313,8 @@ def truncate_motd_line(
 
 class BBCodeTransformer(PlainTransformer):
     def __init__(self, *, bedrock: bool = False) -> None:
-        self.bedrock = bedrock
+        # mcstatus 14 起 transformer 的 bedrock 参数不再有默认值
+        super().__init__(bedrock=bedrock)
         self.on_reset = []
 
     def transform(self, motd_components: Sequence[ParsedMotdComponent]) -> str:
@@ -313,7 +329,7 @@ class BBCodeTransformer(PlainTransformer):
             text,
         )
 
-    def _handle_minecraft_color(self, element: MinecraftColor, /) -> str:
+    def _handle_minecraft_color(self, element: AnyMinecraftColor, /) -> str:
         stroke_map = ENUM_STROKE_COLOR_BEDROCK if self.bedrock else ENUM_STROKE_COLOR
         color_map = ENUM_CODE_COLOR_BEDROCK if self.bedrock else ENUM_CODE_COLOR
         self.on_reset.append("[/color][/stroke]")
@@ -323,11 +339,17 @@ class BBCodeTransformer(PlainTransformer):
         self.on_reset.append("[/color][/stroke]")
         return f"[stroke={STROKE_COLOR['f']}][color={element.hex}]"
 
-    def _handle_formatting(self, element: Formatting, /) -> str:
-        if element is Formatting.RESET:
+    def _handle_invalid_formatting(self, element: InvalidFormatting, /) -> str:
+        # mcstatus 14 起无效格式码（如 &z）解析为 InvalidFormatting，
+        # 与官方行为一致，直接忽略
+        return ""
+
+    def _handle_formatting(self, element: AnyFormatting, /) -> str:
+        if element is JavaFormatting.RESET or element is BedrockFormatting.RESET:
             to_return = "".join(self.on_reset)
             self.on_reset = []
             return to_return
-        start, end = ENUM_STYLE_BBCODE[element]
+        style_map = ENUM_STYLE_BBCODE_BEDROCK if self.bedrock else ENUM_STYLE_BBCODE
+        start, end = style_map[element]
         self.on_reset.append(end)
         return start

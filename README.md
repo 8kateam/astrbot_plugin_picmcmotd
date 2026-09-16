@@ -100,7 +100,7 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 插件根目录已包含 `requirements.txt`，AstrBot 安装插件时会自动安装依赖：
 
 ```text
-mcstatus>=12.0.5,<13
+mcstatus>=14.2.0,<15
 dnspython>=2.7.0
 Pillow>=12.0.0
 ```
@@ -118,4 +118,6 @@ Pillow>=12.0.0
 
 完整的 MIT 许可证文本[见此](/LICENSE-UPSTREAM)。
 
-Minecraft AE Pixel 字体经溯源实为 Mojangles（英/数/标点）与 Unifont（其余字符）的混合字体，其原始独立来源已不可考。该字体组合严禁商用，且不随插件内置，请前往 Releases 页面单独下载并安装。
+> [!IMPORTANT]
+> Minecraft AE Pixel 字体经溯源实为 Mojangles（英/数/标点）与 Unifont（其余字符）的混合字体，其原始独立来源已不可考。该字体组合严禁商用，且不随插件内置，请前往 Releases 页面单独下载并安装。
+

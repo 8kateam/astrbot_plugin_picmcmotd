@@ -5,11 +5,12 @@ import socket
 from collections.abc import Sequence
 from functools import partial
 from io import BytesIO
-from typing import TYPE_CHECKING, Any, Optional, TypeAlias, Union, cast
+from typing import Any, Optional, TypeAlias, Union, cast
 
 from mcstatus import BedrockServer, JavaServer
 from mcstatus.motd import Motd
-from mcstatus.status_response import JavaStatusResponse
+# mcstatus 13 起 status_response 更名为 responses
+from mcstatus.responses import BedrockStatusResponse, JavaStatusResponse
 from astrbot.api import logger
 from PIL.Image import Resampling
 
@@ -27,9 +28,6 @@ from .util import (
     truncate_motd_line,
     trim_motd,
 )
-
-if TYPE_CHECKING:
-    from mcstatus.responses import BedrockStatusResponse
 
 MARGIN = 32
 MIN_WIDTH = 512
@@ -305,7 +303,7 @@ def draw_java(res: JavaStatusResponse, addr: str) -> BytesIO:
     if config.show_motd:
         motd = [
             transformer.transform(truncate_motd_line(x))
-            for x in split_motd_lines(trim_motd(res.motd.parsed))
+            for x in split_motd_lines(trim_motd(res.motd.parsed), bedrock=res.motd.bedrock)
         ]
     else:
         motd = [
@@ -381,7 +379,7 @@ def draw_bedrock(res: "BedrockStatusResponse", addr: str) -> BytesIO:
     if config.show_motd:
         motd = (
             transformer.transform(truncate_motd_line(x))
-            for x in split_motd_lines(trim_motd(res.motd.parsed))
+            for x in split_motd_lines(trim_motd(res.motd.parsed), bedrock=res.motd.bedrock)
         )
     else:
         motd = [

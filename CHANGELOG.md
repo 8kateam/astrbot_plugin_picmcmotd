@@ -1,3 +1,13 @@
+## 1.1.0
+
+升级 `mcstatus` 依赖至 14.2.0（`mcstatus>=14.2.0,<15`），适配 v13/v14 的破坏性变更：
+
+- `mcstatus.status_response` 模块更名为 `mcstatus.responses`，Forge 数据的 TypedDict 移至 `mcstatus.responses._raw`，更新相应导入。
+- `MinecraftColor`/`Formatting` 枚举按 Java 与基岩版拆分为 `JavaMinecraftColor`/`BedrockMinecraftColor`/`JavaFormatting`/`BedrockFormatting`，MOTD 换行拆分与 BBCode 渲染改为按服务器版本使用对应枚举查表。
+- MOTD transformer 已迁入私有模块，`PlainTransformer` 改从 `mcstatus.motd._transformers` 导入，并显式适配其不再有默认值的 `bedrock` 参数。
+- 新增的 `InvalidFormatting` 组件（无效格式码）按官方行为直接忽略。
+- 补全基岩版专属渲染色表（`h`~`v` 材质色及基岩版灰色），避免基岩版 MOTD 渲染时查表失败。
+
 ## 1.0.1
 
 修复渲染彩虹字体时的字符间距过大问题。
