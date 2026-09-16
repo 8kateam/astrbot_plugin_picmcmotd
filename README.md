@@ -109,6 +109,7 @@ Pillow>=12.0.0
 
 - [`nonebot_plugin_picmcstat`](https://github.com/lgc-NB2Dev/nonebot-plugin-picmcstat) - 上游项目，本仓库自此复刻并重构内容。
 - [OpenCode](https://opencode.ai/) - 本项目部分代码使用此 AI 编程工具协助完成，并经由人工审阅。
+- [DeepSeek Harness](https://www.deepseek.com/harness/) - 本项目部分代码使用此 AI 编程工具协助完成，并经由人工审阅。
 
 ## LICENSE
 
