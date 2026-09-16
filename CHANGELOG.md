@@ -1,4 +1,4 @@
-## 1.2.0
+## 1.2.1
 
 修复基岩版服务器查询报错（`AttributeError: 'BedrockStatusVersion' object has no attribute 'version'`）：mcstatus 13 重构响应对象时，`BedrockStatusVersion` 的版本号字段由 `version` 更名为 `name`，更新 `draw_bedrock` 中的遗留调用为 `res.version.name`。
 

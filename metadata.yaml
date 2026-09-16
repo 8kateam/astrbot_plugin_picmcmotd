@@ -1,7 +1,7 @@
 name: astrbot_plugin_picmcmotd
 display_name: PicMCMotd
 desc: 查询 Minecraft 服务器 MOTD 和在线状态，并绘图输出信息，支持查询 Java 版和基岩版服务器。
-version: v1.2.0
+version: v1.2.1
 author: Midnight-2004
 repo: https://github.com/8kateam/astrbot_plugin_picmcmotd
 astrbot_version: ">=4.17.0,<5"
