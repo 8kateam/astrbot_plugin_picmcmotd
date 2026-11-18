@@ -84,6 +84,13 @@ class ConfigProxy:
         return value if 1 <= value <= 60 else 10
 
     @property
+    def bedrock_transport(self) -> str:
+        value = self.get("bedrock_transport", "auto")
+        if value not in ("auto", "prefer_raknet", "prefer_nethernet", "raknet", "nethernet"):
+            return "auto"
+        return value
+
+    @property
     def java_protocol_version(self) -> int:
         return int(self.get("java_protocol_version", 776))
 

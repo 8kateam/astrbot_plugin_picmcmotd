@@ -109,6 +109,13 @@
     "default": 10,
     "hint": "单次 Java 或基岩版查询的总时限，包含 DNS 解析和状态请求。可设置为 1~60 秒。"
   },
+  "bedrock_transport": {
+    "description": "基岩版查询传输协议",
+    "type": "string",
+    "default": "auto",
+    "options": ["auto", "prefer_raknet", "prefer_nethernet", "raknet", "nethernet"],
+    "hint": "控制基岩版服务器状态查询（/motdpe、别名 /motdbe，以及 /motd 自动检测的基岩分支）使用的传输协议。auto：并发探测 RakNet 与 NetherNet，采用先成功的结果；prefer_raknet / prefer_nethernet：优先按对应协议查询，失败时回落另一协议；raknet / nethernet：仅按对应协议查询。"
+  },
   "java_protocol_version": {
     "description": "Java 版查询协议版本",
     "type": "int",

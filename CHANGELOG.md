@@ -1,3 +1,17 @@
+## 1.3.0
+
+> [!IMPORTANT]
+> 升级前请务必确保你使用的 Python 版本 ≥3.11。
+
+升级 `mcstatus` 依赖至 15.0.0（`mcstatus>=15.0.0,<16`），支持基岩版新版 NetherNet 网络协议：
+
+- 新增配置项 `bedrock_transport`（默认 `auto`），控制基岩版查询（`/motdpe`、别名 `/motdbe`，以及 `/motd` 自动检测的基岩分支）使用的传输协议：
+  - `auto`：并发探测 RakNet 与 NetherNet，采用先成功的结果（mcstatus 默认行为）
+  - `prefer_raknet` / `prefer_nethernet`：优先按对应协议查询，失败时回落另一协议
+  - `raknet` / `nethernet`：仅按对应协议查询
+- NetherNet 自基岩版 1.26.50 起为默认传输协议，旧版 RakNet 已于 1.26.60 弃用；不确定服务器使用哪种协议时，保持默认 `auto` 即可。
+- 适配 mcstatus 15 破坏性变更：基岩版 auto 传输查询全部失败时抛出 `ExceptionGroup`，错误图解析时展开子异常；mcstatus 15 要求 Python 3.11 及以上版本。
+
 ## 1.2.1
 
 修复基岩版服务器查询报错（`AttributeError: 'BedrockStatusVersion' object has no attribute 'version'`）：mcstatus 13 重构响应对象时，`BedrockStatusVersion` 的版本号字段由 `version` 更名为 `name`，更新 `draw_bedrock` 中的遗留调用为 `res.version.name`。

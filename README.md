@@ -36,7 +36,9 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 | `/motdpe <服务器地址>` | 强制按 Minecraft 基岩版服务器查询。 |
 | `/motdbe <服务器地址>` | `/motdpe` 的别名，强制按基岩版服务器查询。 |
 
-所有查询指令的默认端口均为 25565。
+所有查询指令的默认端口：Java 版为 25565，基岩版为 19132（RakNet 与 NetherNet 相同）。
+
+基岩版查询使用的传输协议（RakNet / NetherNet）由配置项 `bedrock_transport` 控制，详见下方配置表与「基岩版协议说明」。
 
 服务器地址必须与指令之间使用空格分隔，例如：
 
@@ -66,9 +68,16 @@ PicMCMotd 是一个 AstrBot 插件，用于查询 Minecraft 服务器 MOTD 和�
 | `resolve_dns_ipv6` | `false` | 是否优先解析并尝试 IPv6。 <br> 当启用此配置项时，会优先尝试使用 IPv6 地址进行连接，如连接失败则自动回落到 IPv4。<br> 此配置项依赖 `resolve_dns`，若 `resolve_dns` 为 `false`，插件不会解析 DNS 记录，本配置项将不生效。 |
 | `query_twice` | `true` | 是否查询两次以改善延迟显示。 <br> 由于第一次测得的延迟一般不准，所以做了这个配置，开启后每次查询时，会丢掉第一次的结果再查询一次，且使用第二次查询到的结果。 |
 | `query_timeout` | `10` | 单次 Java 版或基岩版查询的总超时时间，单位为秒，包含 DNS 解析和状态请求。可设置范围为 `1` 至 `60`。 |
+| `bedrock_transport` | `auto` | 基岩版查询使用的传输协议。<br> `auto`：并发探测 RakNet 与 NetherNet，采用先成功的结果；`prefer_raknet` / `prefer_nethernet`：优先按对应协议查询，失败时回落另一协议；`raknet` / `nethernet`：仅按对应协议查询。 |
 | `java_protocol_version` | `776` | Java 版查询时发送的[协议版本](https://zh.minecraft.wiki/w/%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC?variant=zh-cn)。 <br> [Java 版正式版协议版本列表](https://8ka.hk/pvn) |
 | `enable_auto_detect` | `true` | `/motd` 是否自动检测服务器类型。 <br> 关闭后将始终作为 Java 版服务器查询。 |
 | `command_prefix` | `/` | 帮助图中显示的指令前缀。仅影响帮助图渲染，实际前缀由 AstrBot 配置管理。 |
+
+## 基岩版协议说明
+
+基岩版自 1.26.50 起默认启用新版 NetherNet 网络传输协议（HTTP 信令 + WebRTC 数据通道），旧版 RakNet 协议已于 1.26.60 弃用。插件自 1.3.0 起基于 mcstatus 15 同时支持两种协议的状态查询，可通过配置项 `bedrock_transport` 选择传输协议；不确定服务器使用哪种协议时，保持默认 `auto` 即可。
+
+注意：mcstatus 15 要求 Python 3.11 及以上版本。
 
 ## 字体配置
 

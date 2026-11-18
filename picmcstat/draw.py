@@ -7,7 +7,7 @@ from functools import partial
 from io import BytesIO
 from typing import Any, Optional, TypeAlias, Union, cast
 
-from mcstatus import BedrockServer, JavaServer
+from mcstatus import BedrockServer, BedrockTransport, JavaServer
 from mcstatus.motd import Motd
 # mcstatus 13 起 status_response 更名为 responses
 from mcstatus.responses import BedrockStatusResponse, JavaStatusResponse
@@ -422,6 +422,12 @@ def draw_bedrock(res: "BedrockStatusResponse", addr: str) -> BytesIO:
 
 
 def parse_error(e: Exception) -> tuple[str, str]:
+    # mcstatus 15 起基岩版 auto 传输全部失败时抛 ExceptionGroup，展开取子异常解析
+    if isinstance(e, ExceptionGroup):
+        for sub in e.exceptions:
+            if isinstance(sub, asyncio.CancelledError):
+                continue
+            return parse_error(sub)
     if isinstance(e, TimeoutError):
         return "请求超时", ""
     if isinstance(e, socket.gaierror):
@@ -478,6 +484,8 @@ def draw_resp(
 
 def is_ipv6_unreachable_error(e: BaseException) -> bool:
     """Check if exception is due to IPv6 network being unreachable."""
+    if isinstance(e, ExceptionGroup):
+        return any(is_ipv6_unreachable_error(x) for x in e.exceptions)
     if isinstance(e, OSError) and e.errno in (
         errno.ENETUNREACH,
         errno.EHOSTUNREACH,
@@ -494,11 +502,45 @@ async def draw(ip: str, svr_type: ServerType) -> BytesIO:
         is_java = t == "je"
         host, port = await resolve_ip(ip, is_java, resolve_dns_ipv6=resolve_dns_ipv6)
 
-        svr = JavaServer(host, port) if is_java else BedrockServer(host, port)
-        kw = {"version": config.java_protocol_version} if is_java else {}
-        if config.query_twice:
-            await svr.async_status(**kw)  # 第一次延迟通常不准
-        resp = await svr.async_status(**kw)
+        if is_java:
+            svr = JavaServer(host, port)
+            kw = {"version": config.java_protocol_version}
+            if config.query_twice:
+                await svr.async_status(**kw)  # 第一次延迟通常不准
+            resp = await svr.async_status(**kw)
+            return draw_resp(resp, ip)
+
+        # 基岩版查询按 bedrock_transport 配置选择传输协议（mcstatus 15 起）。
+        async def _query_bedrock(transport: BedrockTransport | None = None) -> BedrockStatusResponse:
+            # transport 为 None 时走 mcstatus 的 auto 传输，并发探测 RakNet 与 NetherNet
+            svr = (
+                BedrockServer(host, port, transport=transport)
+                if transport
+                else BedrockServer(host, port)
+            )
+            if config.query_twice:
+                await svr.async_status()  # 第一次延迟通常不准
+            return await svr.async_status()
+
+        mode = config.bedrock_transport
+        if mode == "raknet":
+            resp = await _query_bedrock(BedrockTransport.RAKNET)
+        elif mode == "nethernet":
+            resp = await _query_bedrock(BedrockTransport.NETHERNET)
+        elif mode == "prefer_raknet":
+            try:
+                resp = await _query_bedrock(BedrockTransport.RAKNET)
+            except Exception as e:
+                logger.warning(f"RakNet 查询失败，回落 NetherNet：{e.__class__.__name__}: {e}")
+                resp = await _query_bedrock(BedrockTransport.NETHERNET)
+        elif mode == "prefer_nethernet":
+            try:
+                resp = await _query_bedrock(BedrockTransport.NETHERNET)
+            except Exception as e:
+                logger.warning(f"NetherNet 查询失败，回落 RakNet：{e.__class__.__name__}: {e}")
+                resp = await _query_bedrock(BedrockTransport.RAKNET)
+        else:  # auto（默认）
+            resp = await _query_bedrock()
         return draw_resp(resp, ip)
 
     async def _inner_with_fallback(t: ServerTypeRaw) -> BytesIO:
